@@ -8,18 +8,21 @@ const db = knex(dbConfig);
 
 export const checkEmail = async (req, res) => {
     const { email } = req.body;
-
+    console.log(`Checking email: ${email}`); // Log email being checked
+  
     try {
-        const user = await db('users').where({ email }).first();
-        if (user) {
-            res.status(200).json({ message: 'Email exists' });
-        } else {
-            res.status(404).json({ message: 'Email not found' });
-        }
+      const user = await db('users').where({ email }).first();
+      if (user) {
+        res.status(200).json({ message: 'Email exists' });
+      } else {
+        res.status(202).json({ message: 'Email not found' }); // Email check
+      }
     } catch (error) {
-        res.status(500).json({ error: 'Error checking email' });
+      console.error('Error checking email:', error.message);
+      res.status(500).json({ error: 'Error checking email', details: error.message });
     }
-};
+  };
+  
 
 export const register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
@@ -29,7 +32,6 @@ export const register = async (req, res) => {
     }
 
     try {
-        // Checks if the email already exists
         const existingUser = await db('users').where({ email }).first();
         if (existingUser) {
             return res.status(409).json({ error: 'Email already in use' });
@@ -39,7 +41,7 @@ export const register = async (req, res) => {
         await db('users').insert({ first_name, last_name, email, password: hashedPassword });
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        console.error('Error registering user:', error.message); 
+        console.error('Error registering user:', error.message);
         res.status(500).json({ error: 'Error registering user', details: error.message });
     }
 };
