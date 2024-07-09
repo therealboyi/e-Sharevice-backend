@@ -8,21 +8,20 @@ const db = knex(dbConfig);
 
 export const checkEmail = async (req, res) => {
     const { email } = req.body;
-    console.log(`Checking email: ${email}`); // Log email being checked
-  
+    console.log(`Checking email: ${email}`);
+
     try {
-      const user = await db('users').where({ email }).first();
-      if (user) {
-        res.status(200).json({ message: 'Email exists' });
-      } else {
-        res.status(202).json({ message: 'Email not found' }); // Email check
-      }
+        const user = await db('users').where({ email }).first();
+        if (user) {
+            res.status(200).json({ message: 'Email exists' });
+        } else {
+            res.status(202).json({ message: 'Email not found' });
+        }
     } catch (error) {
-      console.error('Error checking email:', error.message);
-      res.status(500).json({ error: 'Error checking email', details: error.message });
+        console.error('Error checking email:', error.message);
+        res.status(500).json({ error: 'Error checking email', details: error.message });
     }
-  };
-  
+};
 
 export const register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
@@ -34,15 +33,27 @@ export const register = async (req, res) => {
     try {
         const existingUser = await db('users').where({ email }).first();
         if (existingUser) {
+            console.log(`Email already in use: ${email}`);
             return res.status(409).json({ error: 'Email already in use' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        await db('users').insert({ first_name, last_name, email, password: hashedPassword });
+        const newUser = await db('users').insert({
+            first_name,
+            last_name,
+            email,
+            password: hashedPassword
+        });
+        console.log(`User registered successfully: ${newUser}`);
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        console.error('Error registering user:', error.message);
-        res.status(500).json({ error: 'Error registering user', details: error.message });
+        if (error.code === 'ER_DUP_ENTRY') {
+            console.error('Duplicate entry error:', error.message);
+            res.status(409).json({ error: 'Email already in use' });
+        } else {
+            console.error('Error registering user:', error.message);
+            res.status(500).json({ error: 'Error registering user', details: error.message });
+        }
     }
 };
 

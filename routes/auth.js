@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post('/signup', register);
 router.post('/login', login);
-router.post('/check-email', checkEmail); // This should match
+router.post('/check-email', checkEmail);
 
 export default router;
