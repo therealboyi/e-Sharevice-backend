@@ -6,6 +6,21 @@ import dbConfig from '../knexfile.js';
 
 const db = knex(dbConfig);
 
+export const checkEmail = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await db('users').where({ email }).first();
+        if (user) {
+            res.status(200).json({ message: 'Email exists' });
+        } else {
+            res.status(404).json({ message: 'Email not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error checking email' });
+    }
+};
+
 export const register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
 
