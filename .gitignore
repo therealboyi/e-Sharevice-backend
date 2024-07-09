@@ -2,3 +2,264 @@
 *.css.map
 *.sass.map
 *.scss.map
+*.css
+
+# General
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.bak
+*.pid
+
+# Operating System
+*.DS_Store
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Visual Studio
+.vs/
+*.vcxproj.user
+*.userosscache
+*.suo
+*.user
+*.rsuser
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.venv/
+venv/
+ENV/
+env/
+.venv/
+*.coverage
+.coverage.*
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.ipr
+*.iws
+target/
+build/
+
+# Ruby
+*.gem
+*.rbc
+*.sass-cache/
+.ruby-version
+.ruby-gemset
+.vagrant/
+.bundle/
+vendor/bundle/
+log/
+tmp/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Rust
+/target/
+**/*.rs.bk
+
+# Haskell
+*.hi
+*.o
+*.hs.bk
+
+# Lua
+luac.out
+
+# Objective-C
+*.o
+*.d
+*.dt
+*.tgz
+build/
+
+# Swift
+.build/
+*.xcodeproj
+*.xcworkspace
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xccheckout
+*.xcuserstate
+*.moved-aside
+*.xcuserdatad/
+*.xcscmblueprint
+
+# Android Studio
+.gradle/
+.idea/
+build/
+local.properties
+*.iml
+*.hprof
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+*.pydevproject
+.project
+.metadata
+*.bak
+*.tmp
+*.swp
+*.cache
+*.goutputstream
+.metadata/
+*.log
+*.prefs
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# VSCode
+.vscode/
+
+# JetBrains IDEs
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+__MACOSX
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.nfs*
+
+# Other sensitive files
+*.env
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# Backup files
+*.bak
+*.old
+*.swp
+*.swo
+*.tmp
+*.orig
+*.dist
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Package files
+*.jar
+*.war
+*.ear
+*.rar
+*.zip
+*.7z
+*.gz
+*.tar
+
+# Compiled source
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Configuration files
+config/database.yml
+config/secrets.yml
+config/master.key
+
+# Deployment files
+capfile
+Gemfile.lock
+composer.lock
+
+# CI/CD
+coverage/
+*.gcda
+*.gcno
+
+# Sensitive data
+secrets.yml
+credentials.yml
+*.key
+
+# Dependency directories
+vendor/bundle
+vendor/cache
+vendor/gems
+vendor/ruby
+
+# Other
+tags
+.lock-wscript
+.wafpickle-N
+*.wafpickle
+.lock-wscript
+.vite
+readme.txt
