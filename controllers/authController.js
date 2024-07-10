@@ -8,10 +8,11 @@ const db = knex(dbConfig);
 
 export const checkEmail = async (req, res) => {
     const { email } = req.body;
-    console.log(`Checking email: ${email}`);
+    const normalizedEmail = email.toLowerCase();
+    console.log(`Checking email: ${normalizedEmail}`);
 
     try {
-        const user = await db('users').where({ email }).first();
+        const user = await db('users').whereRaw('LOWER(email) = ?', [normalizedEmail]).first();
         if (user) {
             res.status(200).json({ message: 'Email exists' });
         } else {
@@ -25,15 +26,16 @@ export const checkEmail = async (req, res) => {
 
 export const register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
+    const normalizedEmail = email.toLowerCase();
 
-    if (!first_name || !last_name || !email || !password) {
+    if (!first_name || !last_name || !normalizedEmail || !password) {
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
-        const existingUser = await db('users').where({ email }).first();
+        const existingUser = await db('users').whereRaw('LOWER(email) = ?', [normalizedEmail]).first();
         if (existingUser) {
-            console.log(`Email already in use: ${email}`);
+            console.log(`Email already in use: ${normalizedEmail}`);
             return res.status(409).json({ error: 'Email already in use' });
         }
 
@@ -41,7 +43,7 @@ export const register = async (req, res) => {
         const newUser = await db('users').insert({
             first_name,
             last_name,
-            email,
+            email: normalizedEmail,
             password: hashedPassword
         });
         console.log(`User registered successfully: ${newUser}`);
@@ -59,13 +61,14 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    const normalizedEmail = email.toLowerCase();
 
-    if (!email || !password) {
+    if (!normalizedEmail || !password) {
         return res.status(400).json({ error: 'Email and password are required' });
     }
 
     try {
-        const user = await db('users').where({ email }).first();
+        const user = await db('users').whereRaw('LOWER(email) = ?', [normalizedEmail]).first();
         if (user && await bcrypt.compare(password, user.password)) {
             const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.status(200).json({ message: 'Login successful', token });
