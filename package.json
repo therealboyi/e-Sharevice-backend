@@ -12,7 +12,8 @@
     "migrate:rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "db:migrate": "knex migrate:latest",
-    "db:seed": "knex seed:run"
+    "db:seed": "knex seed:run",
+    "migrate:create": "knex migrate:make"
   },
   "keywords": [],
   "author": "",

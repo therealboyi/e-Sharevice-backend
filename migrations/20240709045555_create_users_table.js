@@ -1,4 +1,4 @@
-// migrations/[timestamp]_create_users_table.js
+// migrations/20240709045555_create_users_table.js
 export const up = function(knex) {
   return knex.schema.createTable('users', function(table) {
     table.increments('id').primary();

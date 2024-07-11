@@ -1,4 +1,4 @@
-// seeds/[timestamp]_sample_users.js
+// seeds/sample_users.js
 import bcrypt from 'bcrypt';
 
 export const seed = async function(knex) {

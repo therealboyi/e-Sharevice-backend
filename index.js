@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
+import exchangeRoutes from './routes/exchange.js';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', authRoutes);
+app.use('/', exchangeRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 💯 Server is running on port ${PORT}`);
