@@ -37,12 +37,13 @@ export const createExchangeItem = async (req, res) => {
         service,
         date,
         exchange,
-        description
+        description,
+        rateType
     } = req.body;
     const image = req.file;
 
     try {
-        let imgSrc = null;
+        let imgSrc = '/uploads/avatar.png'; // Set a default image path if no image is uploaded
         if (image) {
             const fileBuffer = fs.readFileSync(image.path);
             const hash = getHash(fileBuffer);
@@ -66,7 +67,8 @@ export const createExchangeItem = async (req, res) => {
             date,
             exchange,
             imgSrc,
-            description
+            description,
+            rateType
         });
 
         const newItem = await db('exchange_items').where({
@@ -92,7 +94,8 @@ export const updateExchangeItem = async (req, res) => {
         service,
         date,
         exchange,
-        description
+        description,
+        rateType
     } = req.body;
     const image = req.file;
 
@@ -121,7 +124,7 @@ export const updateExchangeItem = async (req, res) => {
             }
         }
 
-        const updatedItem = await db('exchange_items')
+        await db('exchange_items')
             .where({
                 id
             })
@@ -131,13 +134,18 @@ export const updateExchangeItem = async (req, res) => {
                 date,
                 exchange,
                 imgSrc,
-                description
-            })
-            .returning('*');
+                description,
+                rateType
+            });
+
+        const updatedItem = await db('exchange_items').where({
+            id
+        }).first();
         const host = `${req.protocol}://${req.get('host')}`;
-        updatedItem[0].imgSrc = updatedItem[0].imgSrc ? `${host}${updatedItem[0].imgSrc}` : null;
-        res.status(200).json(updatedItem[0]);
+        updatedItem.imgSrc = updatedItem.imgSrc ? `${host}${updatedItem.imgSrc}` : null;
+        res.status(200).json(updatedItem);
     } catch (error) {
+        console.error('Error updating exchange item:', error);
         res.status(500).json({
             error: 'Error updating exchange item'
         });
