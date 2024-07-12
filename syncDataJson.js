@@ -4,7 +4,6 @@ import dbConfig from './knexfile.js';
 import {
     writeDataFile
 } from './fileUtils.js';
-import dotenv from 'dotenv';
 
 const db = knex(dbConfig);
 
@@ -16,14 +15,13 @@ const syncDataJson = async () => {
             provider: item.provider,
             service: item.service,
             imgSrc: `${host}${item.imgSrc}`,
-            exchange: item.exchange
+            exchange: item.exchange,
+            created_at: item.created_at
         }));
         await writeDataFile(formattedItems);
         console.log('data.json synced successfully');
     } catch (error) {
         console.error('Error syncing data.json:', error);
-    } finally {
-        db.destroy();
     }
 };
 

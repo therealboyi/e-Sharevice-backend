@@ -9,6 +9,9 @@ import {
     writeDataFile
 } from '../fileUtils.js';
 import dotenv from 'dotenv';
+import moment from 'moment';
+
+dotenv.config();
 
 const db = knex(dbConfig);
 
@@ -28,7 +31,8 @@ const syncDataJson = async () => {
             provider: item.provider,
             service: item.service,
             imgSrc: `${host}${item.imgSrc}`,
-            exchange: item.exchange
+            exchange: item.exchange,
+            created_at: item.created_at
         }));
         await writeDataFile(formattedItems);
         console.log('data.json synced successfully');
@@ -50,6 +54,7 @@ export const getAllExchangeItems = async (req, res) => {
         }));
         res.status(200).json(itemsWithFullUrls);
     } catch (error) {
+        console.error('Error fetching exchange items:', error);
         res.status(500).json({
             error: 'Error fetching exchange items'
         });
@@ -67,6 +72,7 @@ export const createExchangeItem = async (req, res) => {
     } = req.body;
     const image = req.file;
     const userId = req.user.id;
+    const created_at = moment().format('YYYY-MM-DD HH:mm:ss');
 
     try {
         let imgSrc = '/uploads/public/noimage.png';
@@ -95,7 +101,8 @@ export const createExchangeItem = async (req, res) => {
             imgSrc,
             description,
             rateType,
-            user_id: userId,
+            created_at,
+            user_id: userId
         });
 
         const newItem = await db('exchange_items').where({
@@ -104,25 +111,23 @@ export const createExchangeItem = async (req, res) => {
         const host = `${req.protocol}://${req.get('host')}`;
         newItem.imgSrc = newItem.imgSrc ? `${host}${newItem.imgSrc}` : null;
 
-        // Read current data from data.json
         const data = await readDataFile();
-
-        // Append the new item to the data
         data.push({
             provider,
             service,
             imgSrc: newItem.imgSrc,
             exchange,
+            created_at
         });
 
-        // Write the updated data back to data.json
         await writeDataFile(data);
 
         res.status(201).json(newItem);
     } catch (error) {
         console.error('Error creating exchange item:', error);
         res.status(500).json({
-            error: 'Error creating exchange item'
+            error: 'Error creating exchange item',
+            details: error.message
         });
     }
 };
@@ -189,11 +194,12 @@ export const updateExchangeItem = async (req, res) => {
         updatedItem.imgSrc = updatedItem.imgSrc ? `${host}${updatedItem.imgSrc}` : null;
         res.status(200).json(updatedItem);
 
-        await syncDataJson(); // Sync the JSON file
+        await syncDataJson();
     } catch (error) {
         console.error('Error updating exchange item:', error);
         res.status(500).json({
-            error: 'Error updating exchange item'
+            error: 'Error updating exchange item',
+            details: error.message
         });
     }
 };
@@ -225,24 +231,19 @@ export const deleteExchangeItem = async (req, res) => {
             })
             .del();
 
-        // Read current data from data.json
         const data = await readDataFile();
-
-        // Filter out the item to be deleted
         const updatedData = data.filter(item => item.imgSrc !== `${req.protocol}://${req.get('host')}${itemToDelete.imgSrc}`);
-
-        // Write the updated data back to data.json
         await writeDataFile(updatedData);
 
         res.status(200).json({
             message: 'Exchange item deleted successfully'
         });
-
-        await syncDataJson(); // Sync the JSON file
+        await syncDataJson();
     } catch (error) {
         console.error('Error deleting exchange item:', error);
         res.status(500).json({
-            error: 'Error deleting exchange item'
+            error: 'Error deleting exchange item',
+            details: error.message
         });
     }
 };

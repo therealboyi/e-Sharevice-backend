@@ -1,7 +1,7 @@
-// seeds/seed_all.js
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
+import moment from 'moment';
 import {
     appendDataFile,
     writeDataFile
@@ -71,83 +71,92 @@ export const seed = async function (knex) {
     const exchangeItems = [{
             provider: 'Personal Instructor',
             service: 'Service',
-            date: '2024-07-10T02:39:04.587Z',
+            date: moment('2024-07-10T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: Dumbbells - Jul 11, 2024',
             imgSrc: '/uploads/public/messi.png',
             description: 'Get fit with me.',
-            user_id: users[0].id
+            user_id: users[0].id,
+            created_at: moment('2024-07-10T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Yoga Mat',
             service: 'Item',
-            date: '2024-07-11T02:39:04.587Z',
+            date: moment('2024-07-11T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: Yoga Instructions - Jul 12, 2024',
             imgSrc: '/uploads/public/ronaldo.png',
             description: 'FreeYoga classes.',
-            user_id: users[0].id
+            user_id: users[0].id,
+            created_at: moment('2024-07-11T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Nutritionist',
             service: 'Service',
-            date: '2024-07-12T02:39:04.587Z',
+            date: moment('2024-07-12T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: Unused Food Containers - Jul 13, 2024',
             imgSrc: '/uploads/public/lebron.png',
             description: 'Personalized diet plans.',
-            user_id: users[0].id
+            user_id: users[0].id,
+            created_at: moment('2024-07-12T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Gardening',
             service: 'Service',
-            date: '2024-07-10T02:39:05.587Z',
+            date: moment('2024-07-10T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: Power Drill - Jul 11, 2024',
             imgSrc: '/uploads/public/mbappe.png',
             description: 'I can help you with taking care of your greens.',
-            user_id: users[1].id
+            user_id: users[1].id,
+            created_at: moment('2024-07-10T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Lawn Mowing',
             service: 'Service',
-            date: '2024-07-11T02:39:05.587Z',
+            date: moment('2024-07-11T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: $500 - Jul 12, 2024',
             imgSrc: '/uploads/public/giannis.png',
             description: 'Lawn mower.',
-            user_id: users[1].id
+            user_id: users[1].id,
+            created_at: moment('2024-07-11T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Plant Care',
             service: 'Service',
-            date: '2024-07-12T02:39:05.587Z',
+            date: moment('2024-07-12T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: Watering Can - Jul 13, 2024',
             imgSrc: '/uploads/public/curry.png',
             description: 'Plant care and watering services.',
-            user_id: users[1].id
+            user_id: users[1].id,
+            created_at: moment('2024-07-12T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Buzz Lightyear',
             service: 'Item',
-            date: '2024-07-10T02:40:05.587Z',
+            date: moment('2024-07-10T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: $15 - Jul 11, 2024',
             imgSrc: '/uploads/public/durant.png',
             description: 'Used toy in good condition.',
-            user_id: users[2].id
+            user_id: users[2].id,
+            created_at: moment('2024-07-10T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Toy Story',
             service: 'Service',
-            date: '2024-07-11T02:40:05.587Z',
+            date: moment('2024-07-11T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: $10/hr - Jul 12, 2024',
             imgSrc: '/uploads/public/neymar.png',
             description: 'Bedtime Toy Story for your kids.',
-            user_id: users[2].id
+            user_id: users[2].id,
+            created_at: moment('2024-07-11T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Comic Book',
             service: 'Item',
-            date: '2024-07-12T02:40:05.587Z',
+            date: moment('2024-07-12T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
             exchange: 'Exchange Type: $5 - Jul 13, 2024',
             imgSrc: '/uploads/public/debryune.png',
             description: 'Rare comic book.',
-            user_id: users[2].id
+            user_id: users[2].id,
+            created_at: moment('2024-07-12T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         }
     ];
 
@@ -158,7 +167,8 @@ export const seed = async function (knex) {
         provider: item.provider,
         service: item.service,
         imgSrc: `http://localhost:${process.env.PORT || 8080}${item.imgSrc}`,
-        exchange: item.exchange
+        exchange: item.exchange,
+        created_at: item.created_at
     }));
 
     // Writes the initial data to data.json
