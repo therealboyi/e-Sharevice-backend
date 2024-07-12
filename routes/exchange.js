@@ -8,6 +8,9 @@ import {
     updateExchangeItem,
     deleteExchangeItem
 } from '../controllers/exchangeController.js';
+import {
+    authenticateToken
+} from '../authMiddleware.js';
 
 const router = express.Router();
 
@@ -25,9 +28,9 @@ const upload = multer({
     storage
 });
 
-router.get('/exchange-items', getAllExchangeItems);
-router.post('/exchange-items', upload.single('image'), createExchangeItem); 
-router.put('/exchange-items/:id', upload.single('image'), updateExchangeItem);
-router.delete('/exchange-items/:id', deleteExchangeItem);
+router.get('/exchange-items', authenticateToken, getAllExchangeItems);
+router.post('/exchange-items', authenticateToken, upload.single('image'), createExchangeItem);
+router.put('/exchange-items/:id', authenticateToken, upload.single('image'), updateExchangeItem);
+router.delete('/exchange-items/:id', authenticateToken, deleteExchangeItem);
 
 export default router;

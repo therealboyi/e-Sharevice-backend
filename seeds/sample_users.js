@@ -1,13 +1,12 @@
 // seeds/sample_users.js
 import bcrypt from 'bcrypt';
 
-export const seed = async function(knex) {
+export const seed = async function (knex) {
   // Deletes ALL existing entries
   await knex('users').del();
-  
+
   // Inserts seed entries
-  await knex('users').insert([
-    {
+  await knex('users').insert([{
       first_name: 'John',
       last_name: 'Doe',
       email: 'john.doe@example.com',

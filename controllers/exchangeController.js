@@ -17,7 +17,10 @@ const getHash = (fileBuffer) => {
 
 export const getAllExchangeItems = async (req, res) => {
     try {
-        const items = await db('exchange_items').select('*');
+        const userId = req.user.id;
+        const items = await db('exchange_items').where({
+            user_id: userId
+        }).select('*');
         const host = `${req.protocol}://${req.get('host')}`;
         const itemsWithFullUrls = items.map(item => ({
             ...item,
@@ -41,9 +44,10 @@ export const createExchangeItem = async (req, res) => {
         rateType
     } = req.body;
     const image = req.file;
+    const userId = req.user.id;
 
     try {
-        let imgSrc = '/uploads/avatar.png'; // Set a default image path if no image is uploaded
+        let imgSrc = '/uploads/public/noimage.png';
         if (image) {
             const fileBuffer = fs.readFileSync(image.path);
             const hash = getHash(fileBuffer);
@@ -68,7 +72,8 @@ export const createExchangeItem = async (req, res) => {
             exchange,
             imgSrc,
             description,
-            rateType
+            rateType,
+            user_id: userId
         });
 
         const newItem = await db('exchange_items').where({
@@ -98,6 +103,7 @@ export const updateExchangeItem = async (req, res) => {
         rateType
     } = req.body;
     const image = req.file;
+    const userId = req.user.id;
 
     if (!provider || !service || !date || !exchange || !description) {
         return res.status(400).json({
@@ -126,7 +132,8 @@ export const updateExchangeItem = async (req, res) => {
 
         await db('exchange_items')
             .where({
-                id
+                id,
+                user_id: userId
             })
             .update({
                 provider,
@@ -156,17 +163,20 @@ export const deleteExchangeItem = async (req, res) => {
     const {
         id
     } = req.params;
+    const userId = req.user.id;
 
     try {
         await db('exchange_items')
             .where({
-                id
+                id,
+                user_id: userId
             })
             .del();
         res.status(200).json({
             message: 'Exchange item deleted successfully'
         });
     } catch (error) {
+        console.error('Error deleting exchange item:', error);
         res.status(500).json({
             error: 'Error deleting exchange item'
         });
