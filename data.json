@@ -1,0 +1,56 @@
+[
+  {
+    "provider": "Personal Instructor",
+    "service": "Service",
+    "imgSrc": "http://localhost:8080/uploads/public/messi.png",
+    "exchange": "Exchange Type: Dumbbells - Jul 11, 2024"
+  },
+  {
+    "provider": "Yoga Mat",
+    "service": "Item",
+    "imgSrc": "http://localhost:8080/uploads/public/ronaldo.png",
+    "exchange": "Exchange Type: Yoga Instructions - Jul 12, 2024"
+  },
+  {
+    "provider": "Nutritionist",
+    "service": "Service",
+    "imgSrc": "http://localhost:8080/uploads/public/lebron.png",
+    "exchange": "Exchange Type: Unused Food Containers - Jul 13, 2024"
+  },
+  {
+    "provider": "Gardening",
+    "service": "Service",
+    "imgSrc": "http://localhost:8080/uploads/public/mbappe.png",
+    "exchange": "Exchange Type: Power Drill - Jul 11, 2024"
+  },
+  {
+    "provider": "Lawn Mowing",
+    "service": "Service",
+    "imgSrc": "http://localhost:8080/uploads/public/giannis.png",
+    "exchange": "Exchange Type: $500 - Jul 12, 2024"
+  },
+  {
+    "provider": "Plant Care",
+    "service": "Service",
+    "imgSrc": "http://localhost:8080/uploads/public/curry.png",
+    "exchange": "Exchange Type: Watering Can - Jul 13, 2024"
+  },
+  {
+    "provider": "Buzz Lightyear",
+    "service": "Item",
+    "imgSrc": "http://localhost:8080/uploads/public/durant.png",
+    "exchange": "Exchange Type: $15 - Jul 11, 2024"
+  },
+  {
+    "provider": "Toy Story",
+    "service": "Service",
+    "imgSrc": "http://localhost:8080/uploads/public/neymar.png",
+    "exchange": "Exchange Type: $10/hr - Jul 12, 2024"
+  },
+  {
+    "provider": "Comic Book",
+    "service": "Item",
+    "imgSrc": "http://localhost:8080/uploads/public/debryune.png",
+    "exchange": "Exchange Type: $5 - Jul 13, 2024"
+  }
+]
