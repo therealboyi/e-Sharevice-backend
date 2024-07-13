@@ -11,6 +11,7 @@ import exchangeRoutes from './routes/exchange.js';
 import sampleDataRoutes from './routes/sampleData.js';
 import nodeCron from 'node-cron';
 import syncDataJson from './syncDataJson.js';
+import userRoutes from './routes/user.js';
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use('/uploads', (req, res, next) => {
 });
 
 app.use('/', authRoutes);
+app.use('/', userRoutes);
 app.use('/', exchangeRoutes);
 app.use('/', sampleDataRoutes);
 
