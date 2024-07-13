@@ -1,11 +1,12 @@
-// seeds/seed_all.js 
+// seeds/seed_all.js
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
 import moment from 'moment';
 import {
     appendDataFile,
-    writeDataFile
+    writeDataFile,
+    writeReservedFile
 } from '../fileUtils.js';
 import dotenv from 'dotenv';
 
@@ -30,6 +31,11 @@ const deleteUploadsExceptPublic = () => {
     });
 };
 
+// Function to clear reserved.json file
+const clearReservedFile = async () => {
+    await writeReservedFile([]);
+};
+
 export const seed = async function (knex) {
     // Deletes ALL existing entries
     await knex('exchange_items').del();
@@ -37,6 +43,9 @@ export const seed = async function (knex) {
 
     // Deletes all files in /uploads except those in /uploads/public
     deleteUploadsExceptPublic();
+
+    // Clears the reserved.json file
+    await clearReservedFile();
 
     // Inserts users
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -59,8 +68,8 @@ export const seed = async function (knex) {
         {
             first_name: 'Alice',
             last_name: 'Johnson',
-            email: 'alice.johnson@example.com',
-            password: await bcrypt.hash('password123', 10),
+            email: 'boyijayjay@gmail.com',
+            password: await bcrypt.hash('Lordkratos44.', 10),
             created_at: now,
             updated_at: now
         }
@@ -191,6 +200,9 @@ export const seed = async function (knex) {
         exchange: item.exchange,
         description: item.description,
         user_id: item.user_id,
+        reserved: item.reserved,
+        reserved_by: item.reserved_by,
+        reserved_at: item.reserved_at,
         created_at: item.created_at,
         updated_at: item.updated_at
     }));

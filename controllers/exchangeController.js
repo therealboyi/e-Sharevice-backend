@@ -1,12 +1,10 @@
 // controllers/exchangeController.js
 import knex from 'knex';
 import dbConfig from '../knexfile.js';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
 import {
     readDataFile,
-    writeDataFile
+    writeDataFile,
+    appendReservedFile
 } from '../fileUtils.js';
 import dotenv from 'dotenv';
 import moment from 'moment';
@@ -14,36 +12,6 @@ import moment from 'moment';
 dotenv.config();
 
 const db = knex(dbConfig);
-
-const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
-
-const getHash = (fileBuffer) => {
-    const hash = crypto.createHash('sha256');
-    hash.update(fileBuffer);
-    return hash.digest('hex');
-};
-
-const syncDataJson = async () => {
-    try {
-        const items = await db('exchange_items').select('*');
-        const host = `http://localhost:${process.env.PORT || 8080}`;
-        const formattedItems = items.map(item => ({
-            id: item.id,
-            provider: item.provider,
-            service: item.service,
-            imgSrc: `${host}${item.imgSrc}`,
-            exchange: item.exchange,
-            description: item.description,
-            created_at: item.created_at,
-            updated_at: item.updated_at,
-            user_id: item.user_id
-        }));
-        await writeDataFile(formattedItems);
-        console.log('data.json synced successfully');
-    } catch (error) {
-        console.error('Error syncing data.json:', error);
-    }
-};
 
 export const getAllExchangeItems = async (req, res) => {
     try {
@@ -211,21 +179,19 @@ export const updateExchangeItem = async (req, res) => {
             }
         }
 
-        await db('exchange_items')
-            .where({
-                id,
-                user_id: userId
-            })
-            .update({
-                provider,
-                service,
-                date,
-                exchange,
-                imgSrc,
-                description,
-                rateType,
-                updated_at
-            });
+        await db('exchange_items').where({
+            id,
+            user_id: userId
+        }).update({
+            provider,
+            service,
+            date,
+            exchange,
+            imgSrc,
+            description,
+            rateType,
+            updated_at
+        });
 
         const updatedItem = await db('exchange_items').where({
             id
@@ -251,12 +217,10 @@ export const deleteExchangeItem = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const itemToDelete = await db('exchange_items')
-            .where({
-                id,
-                user_id: userId
-            })
-            .first();
+        const itemToDelete = await db('exchange_items').where({
+            id,
+            user_id: userId
+        }).first();
 
         if (!itemToDelete) {
             return res.status(404).json({
@@ -264,12 +228,10 @@ export const deleteExchangeItem = async (req, res) => {
             });
         }
 
-        await db('exchange_items')
-            .where({
-                id,
-                user_id: userId
-            })
-            .del();
+        await db('exchange_items').where({
+            id,
+            user_id: userId
+        }).del();
 
         const data = await readDataFile();
         const updatedData = data.filter(item => item.imgSrc !== `${req.protocol}://${req.get('host')}${itemToDelete.imgSrc}`);
@@ -285,5 +247,87 @@ export const deleteExchangeItem = async (req, res) => {
             error: 'Error deleting exchange item',
             details: error.message
         });
+    }
+};
+
+export const reserveExchangeItem = async (req, res) => {
+    const {
+        id
+    } = req.params;
+    const userId = req.user.id;
+    const reserved_at = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    try {
+        const item = await db('exchange_items').where({
+            id
+        }).first();
+        if (!item) {
+            return res.status(404).json({
+                error: 'Item not found'
+            });
+        }
+
+        await db('exchange_items').where({
+            id
+        }).update({
+            reserved: true,
+            reserved_by: userId,
+            reserved_at,
+            updated_at: reserved_at
+        });
+
+        const updatedItem = await db('exchange_items').where({
+            id
+        }).first();
+
+        const data = await readDataFile();
+        const updatedData = data.filter(item => item.id !== parseInt(id));
+        await writeDataFile(updatedData);
+
+        await appendReservedFile({
+            ...updatedItem,
+            reserved: true,
+            reserved_by: userId,
+            reserved_at
+        });
+
+        res.status(200).json(updatedItem);
+    } catch (error) {
+        console.error('Error reserving exchange item:', error);
+        res.status(500).json({
+            error: 'Error reserving exchange item',
+            details: error.message
+        });
+    }
+};
+
+const getHash = (fileBuffer) => {
+    const hash = crypto.createHash('sha256');
+    hash.update(fileBuffer);
+    return hash.digest('hex');
+};
+
+const syncDataJson = async () => {
+    try {
+        const items = await db('exchange_items').select('*');
+        const host = `http://localhost:${process.env.PORT || 8080}`;
+        const formattedItems = items.map(item => ({
+            id: item.id,
+            provider: item.provider,
+            service: item.service,
+            imgSrc: `${host}${item.imgSrc}`,
+            exchange: item.exchange,
+            description: item.description,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            user_id: item.user_id,
+            reserved: item.reserved,
+            reserved_by: item.reserved_by,
+            reserved_at: item.reserved_at
+        }));
+        await writeDataFile(formattedItems);
+        console.log('data.json synced successfully');
+    } catch (error) {
+        console.error('Error syncing data.json:', error);
     }
 };

@@ -7,7 +7,8 @@ import {
     createExchangeItem,
     updateExchangeItem,
     deleteExchangeItem,
-    getExchangeItemById
+    getExchangeItemById,
+    reserveExchangeItem
 } from '../controllers/exchangeController.js';
 import {
     authenticateToken
@@ -34,5 +35,6 @@ router.get('/exchange-items/:id', authenticateToken, getExchangeItemById);
 router.post('/exchange-items', authenticateToken, upload.single('image'), createExchangeItem);
 router.put('/exchange-items/:id', authenticateToken, upload.single('image'), updateExchangeItem);
 router.delete('/exchange-items/:id', authenticateToken, deleteExchangeItem);
+router.put('/exchange-items/:id/reserve', authenticateToken, reserveExchangeItem);
 
 export default router;
