@@ -1,4 +1,3 @@
-// routes/exchange.js
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
@@ -31,7 +30,7 @@ const upload = multer({
 });
 
 router.get('/exchange-items', authenticateToken, getAllExchangeItems);
-router.get('/exchange-items/:id', authenticateToken, getExchangeItemById);
+router.get('/exchange-items/:id', getExchangeItemById); // Remove authenticateToken to allow public access
 router.post('/exchange-items', authenticateToken, upload.single('image'), createExchangeItem);
 router.put('/exchange-items/:id', authenticateToken, upload.single('image'), updateExchangeItem);
 router.delete('/exchange-items/:id', authenticateToken, deleteExchangeItem);
