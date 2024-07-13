@@ -50,8 +50,8 @@ app.listen(PORT, () => {
     console.log('❌ 🛑 To kill the server use CTRL+C');
 });
 
-// Schedule the sync task to run every minute
-nodeCron.schedule('* * * * *', () => {
-    console.log('✅ Running syncDataJson every minute');
-    syncDataJson();
-});
+// // Schedule the sync task to run every minute
+// nodeCron.schedule('* * * * *', () => {
+//     console.log('✅ Running syncDataJson every minute');
+//     syncDataJson();
+// });

@@ -1,3 +1,4 @@
+// seeds/seed_all.js 
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
@@ -38,23 +39,30 @@ export const seed = async function (knex) {
     deleteUploadsExceptPublic();
 
     // Inserts users
+    const now = moment().format('YYYY-MM-DD HH:mm:ss');
     await knex('users').insert([{
             first_name: 'John',
             last_name: 'Doe',
             email: 'john.doe@example.com',
-            password: await bcrypt.hash('password123', 10)
+            password: await bcrypt.hash('password123', 10),
+            created_at: now,
+            updated_at: now
         },
         {
             first_name: 'Jane',
             last_name: 'Smith',
             email: 'jane.smith@example.com',
-            password: await bcrypt.hash('password123', 10)
+            password: await bcrypt.hash('password123', 10),
+            created_at: now,
+            updated_at: now
         },
         {
             first_name: 'Alice',
             last_name: 'Johnson',
             email: 'alice.johnson@example.com',
-            password: await bcrypt.hash('password123', 10)
+            password: await bcrypt.hash('password123', 10),
+            created_at: now,
+            updated_at: now
         }
     ]);
 
@@ -76,7 +84,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/messi.png',
             description: 'Get fit with me.',
             user_id: users[0].id,
-            created_at: moment('2024-07-10T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-10T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-10T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Yoga Mat',
@@ -86,7 +95,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/ronaldo.png',
             description: 'FreeYoga classes.',
             user_id: users[0].id,
-            created_at: moment('2024-07-11T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-11T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-11T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Nutritionist',
@@ -96,7 +106,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/lebron.png',
             description: 'Personalized diet plans.',
             user_id: users[0].id,
-            created_at: moment('2024-07-12T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-12T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-12T02:39:04.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Gardening',
@@ -106,7 +117,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/mbappe.png',
             description: 'I can help you with taking care of your greens.',
             user_id: users[1].id,
-            created_at: moment('2024-07-10T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-10T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-10T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Lawn Mowing',
@@ -116,7 +128,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/giannis.png',
             description: 'Lawn mower.',
             user_id: users[1].id,
-            created_at: moment('2024-07-11T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-11T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-11T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Plant Care',
@@ -126,7 +139,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/curry.png',
             description: 'Plant care and watering services.',
             user_id: users[1].id,
-            created_at: moment('2024-07-12T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-12T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-12T02:39:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Buzz Lightyear',
@@ -136,7 +150,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/durant.png',
             description: 'Used toy in good condition.',
             user_id: users[2].id,
-            created_at: moment('2024-07-10T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-10T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-10T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Toy Story',
@@ -146,7 +161,8 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/neymar.png',
             description: 'Bedtime Toy Story for your kids.',
             user_id: users[2].id,
-            created_at: moment('2024-07-11T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-11T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-11T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         },
         {
             provider: 'Comic Book',
@@ -156,19 +172,27 @@ export const seed = async function (knex) {
             imgSrc: '/uploads/public/debryune.png',
             description: 'Rare comic book.',
             user_id: users[2].id,
-            created_at: moment('2024-07-12T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
+            created_at: moment('2024-07-12T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss'),
+            updated_at: moment('2024-07-12T02:40:05.587Z').format('YYYY-MM-DD HH:mm:ss')
         }
     ];
 
     await knex('exchange_items').insert(exchangeItems);
 
+    // Fetch the inserted items
+    const insertedItems = await knex('exchange_items').select('*');
+
     // Converts exchangeItems to the desired format for the JSON file
-    const exchangeItemsForJson = exchangeItems.map(item => ({
+    const exchangeItemsForJson = insertedItems.map(item => ({
+        id: item.id, // Include ID
         provider: item.provider,
         service: item.service,
         imgSrc: `http://localhost:${process.env.PORT || 8080}${item.imgSrc}`,
         exchange: item.exchange,
-        created_at: item.created_at
+        description: item.description,
+        user_id: item.user_id,
+        created_at: item.created_at,
+        updated_at: item.updated_at
     }));
 
     // Writes the initial data to data.json

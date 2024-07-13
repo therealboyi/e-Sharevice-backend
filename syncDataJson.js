@@ -1,4 +1,4 @@
-// syncDataJson.js
+// synchDataJson.js
 import knex from 'knex';
 import dbConfig from './knexfile.js';
 import {
@@ -16,6 +16,8 @@ const syncDataJson = async () => {
             service: item.service,
             imgSrc: `${host}${item.imgSrc}`,
             exchange: item.exchange,
+            description: item.description,
+            user_id: item.user_id,
             created_at: item.created_at
         }));
         await writeDataFile(formattedItems);

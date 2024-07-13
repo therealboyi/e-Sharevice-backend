@@ -6,7 +6,8 @@ import {
     getAllExchangeItems,
     createExchangeItem,
     updateExchangeItem,
-    deleteExchangeItem
+    deleteExchangeItem,
+    getExchangeItemById
 } from '../controllers/exchangeController.js';
 import {
     authenticateToken
@@ -29,6 +30,7 @@ const upload = multer({
 });
 
 router.get('/exchange-items', authenticateToken, getAllExchangeItems);
+router.get('/exchange-items/:id', authenticateToken, getExchangeItemById);
 router.post('/exchange-items', authenticateToken, upload.single('image'), createExchangeItem);
 router.put('/exchange-items/:id', authenticateToken, upload.single('image'), updateExchangeItem);
 router.delete('/exchange-items/:id', authenticateToken, deleteExchangeItem);

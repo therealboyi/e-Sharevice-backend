@@ -28,11 +28,15 @@ const syncDataJson = async () => {
         const items = await db('exchange_items').select('*');
         const host = `http://localhost:${process.env.PORT || 8080}`;
         const formattedItems = items.map(item => ({
+            id: item.id,
             provider: item.provider,
             service: item.service,
             imgSrc: `${host}${item.imgSrc}`,
             exchange: item.exchange,
-            created_at: item.created_at
+            description: item.description,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+            user_id: item.user_id
         }));
         await writeDataFile(formattedItems);
         console.log('data.json synced successfully');
@@ -61,6 +65,34 @@ export const getAllExchangeItems = async (req, res) => {
     }
 };
 
+export const getExchangeItemById = async (req, res) => {
+    const {
+        id
+    } = req.params;
+
+    try {
+        const item = await db('exchange_items').where({
+            id
+        }).first();
+
+        if (!item) {
+            return res.status(404).json({
+                error: 'Item not found'
+            });
+        }
+
+        const host = `${req.protocol}://${req.get('host')}`;
+        item.imgSrc = item.imgSrc ? `${host}${item.imgSrc}` : null;
+
+        res.status(200).json(item);
+    } catch (error) {
+        console.error('Error fetching exchange item:', error);
+        res.status(500).json({
+            error: 'Error fetching exchange item'
+        });
+    }
+};
+
 export const createExchangeItem = async (req, res) => {
     const {
         provider,
@@ -73,6 +105,7 @@ export const createExchangeItem = async (req, res) => {
     const image = req.file;
     const userId = req.user.id;
     const created_at = moment().format('YYYY-MM-DD HH:mm:ss');
+    const updated_at = created_at;
 
     try {
         let imgSrc = '/uploads/public/noimage.png';
@@ -102,6 +135,7 @@ export const createExchangeItem = async (req, res) => {
             description,
             rateType,
             created_at,
+            updated_at,
             user_id: userId
         });
 
@@ -113,11 +147,15 @@ export const createExchangeItem = async (req, res) => {
 
         const data = await readDataFile();
         data.push({
+            id: newItem.id,
             provider,
             service,
             imgSrc: newItem.imgSrc,
             exchange,
-            created_at
+            description,
+            user_id: userId,
+            created_at,
+            updated_at
         });
 
         await writeDataFile(data);
@@ -146,6 +184,7 @@ export const updateExchangeItem = async (req, res) => {
     } = req.body;
     const image = req.file;
     const userId = req.user.id;
+    const updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 
     if (!provider || !service || !date || !exchange || !description) {
         return res.status(400).json({
@@ -184,7 +223,8 @@ export const updateExchangeItem = async (req, res) => {
                 exchange,
                 imgSrc,
                 description,
-                rateType
+                rateType,
+                updated_at
             });
 
         const updatedItem = await db('exchange_items').where({
